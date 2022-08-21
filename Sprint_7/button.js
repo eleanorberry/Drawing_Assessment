@@ -24,6 +24,7 @@ class Button {
         this.outline = c1;
         this.fill = c2;
         this.hover = c3;
+        // listens for mouse movements and enacts specifications
         canvas.addEventListener('click', this.mClick.bind(this));
         canvas.addEventListener('mousemove', this.mMove.bind(this));
         canvas.addEventListener('mousedown', this.mDown.bind(this));
@@ -33,12 +34,12 @@ class Button {
         this.name = Button;
     }
     mDown(e){
-
     }
 
     mUp(e) {}
 
     mClick(e) {
+        // if within bounds sets name and shape
         if (this.inBounds) {
             this.name.selected = this;
             this.name.Shape = this.text;
@@ -46,13 +47,14 @@ class Button {
     }
 
     mMove(e) {
+        // determines mouse movement
         this.xMouse = e.offsetX;
         this.yMouse = e.offsetY;
         this.inBounds = this.inBoundsCheck(this.xMouse, this.yMouse, this.x, this.y, this.w, this.h);
-
     }
 
     inBoundsCheck(xmid, ymid, x, y, w, h) {
+        // Checks whether mouse is within bounds
         // If within parameters of button return true
         return xmid > x && xmid < x + w && ymid > y && ymid < y + h;
     }
@@ -99,30 +101,6 @@ class Button {
 Button.Clicked = "";
 // Makes certain that the shape can be changed
 Button.Shape = "";
-
-class Control_Button extends Button {
-    constructor(x, y, w, h, text, c1, c2, c3) {
-        super(x, y, w, h, text, c1, c2, c3);
-        Control_Button.Clicked = this;
-        Control_Button.selected = this;
-    }
-
-    update() {
-        this.draw();
-    }
-
-    draw() {}
-    mClick() {
-        if (this.inBounds) {
-            Control_Button.selected = this;
-        }
-    }
-}
-
-// Makes sure that only one button can be clicked at once
-Control_Button.Clicked = null;
-// Makes certain that the shape can be changed
-Control_Button.Shape = "";
 
 /**
  *Flower button that attaches to the main button and allows the user to choose the number of petals
@@ -179,7 +157,9 @@ class Flower_button extends Button {
 
     mClick() {
         if (this.inBounds) {
+            // main button selected
             Flower_button.selected = this;
+            // Holds number of petal information
             Flower_button.Petals = this.text;
             ctx.lineWidth = 4;
         }
@@ -189,7 +169,7 @@ class Flower_button extends Button {
 // Makes sure that only one button can be selected at once
 Flower_button.Clicked = "";
 // Changes petal selection
-Flower_button.Petals = "5";
+Flower_button.Petals = "";
 
 /**
  *Size button that attaches to the main button and allows the user to choose the size of the line
@@ -256,10 +236,10 @@ class Size_button extends Button {
 // Makes sure that only one button can be selected at once
 Size_button.Clicked = "";
 // Changes petal selection
-Size_button.Size = "S";
+Size_button.Size = "";
 
 /**
- *
+ * This button controls the edit options (undo, redo and clear)
  * @param {number} x x coordinate of button
  * @param {number} y y coordinate of button
  * @param {number} w width of button
@@ -273,7 +253,6 @@ class Edit_button extends Button {
     constructor(x, y, w, h, text, c1, c2, c3) {
         super(x, y, w, h, text, c1, c2, c3);
         this.name = Edit_button;
-        console.log("Edit created")
     }
     mDown(e) {
         if (this.inBounds) {
@@ -281,10 +260,7 @@ class Edit_button extends Button {
             Edit_button.selected = this;
             console.log("selected");
         }
-        console.log("Edit Down");
-
     }
-
     update() {
         this.draw();
     }
@@ -293,18 +269,16 @@ class Edit_button extends Button {
         if(this.inBounds){
             Edit_button.selected = this;
         }
-        console.log("Edit Click");
     }
 }
 // Makes certain that the function can be changed
-Edit_button.selected = "Banana";
+Edit_button.selected = "";
 
 
 class Swatch extends Button {
     constructor(x, y, w, h, c1, c2, c3) {
         super(x, y, w, h, "", c1, c2, c3);
         this.fill = c2;
-        //console.log(c2)
         this.name = Swatch;
         Swatch.selected = this;
     }

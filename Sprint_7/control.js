@@ -11,12 +11,14 @@ class ControlObject extends InteractiveObject {
         super();
         this.x = 270;
         this.y = 25;
+        // Drawing area dimensions
         this.draw_w = 695;
         this.draw_h = 500;
         this.w = 0;
         this.h = 0;
-        //this.changeChoice = "";
+        // This is the list that keeps track of all objects drawn
         this.objectSet = [];
+        // This is the list that keeps track of all objects removed
         this.removedSet = [];
         this.onDrawingArea = false;
     }
@@ -27,45 +29,47 @@ class ControlObject extends InteractiveObject {
         this.onDrawingArea = this.inBoundsCheck(this.xMouse, this.yMouse, this.x, this.y, this.draw_w, this.draw_h);
     }
     mClick(e) {
+        // On click the edit button is deselected
         Edit_button.selected = null;
         this.changeChoice = null;
     }
     // What program does upon release of mouse
     mUp(e) {
         super.mUp(e);
-        console.log("round 1");
-        console.log(Edit_button.selected);
         // Clear, redo and undo button outcomes
         // If edit button is selected / is not null
         if (Edit_button.selected != null) {
             this.changeChoice = Edit_button.selected.text;
-            console.log("round 2");
-            console.log(this.changeChoice);
             if (this.changeChoice === "Clear") {
+                // if clear - clears all lists
                 this.objectSet = [];
                 this.removedSet = [];
             } else if (this.changeChoice === "Undo") {
+                // deletes one from object list and pushes one to removed
                 if (this.objectSet.length > 0) {
                     this.removedSet.push(this.objectSet[this.objectSet.length - 1]);
                 }
                 this.objectSet.pop();
             } else if (this.changeChoice === "Redo") {
+                // if redo pushes the last removed object into object set
                 if (this.removedSet.length > 0) {
                     this.objectSet.push(this.removedSet[this.removedSet.length - 1]);
                     this.removedSet.pop();
                 }
             }
         }
+        // deselects edit button
         Edit_button.selected = null;
         this.changeChoice = null;
-        console.log(this.changeChoice);
-        //
+        // sets the colour (as chosen in swatch) for all shapes
         let fillColour;
         if (Swatch.selected) {
             fillColour = Swatch.selected.fill;
         } else {
+            // if no swatch is selected colour is black
             fillColour = "rgb(0,0,0)";
         }
+        // If the area selected is on drawing area and height is larger than 0 shape can be drawn
         if (this.onDrawingArea && this.h!==0){
             // instantiates the different shapes with relevant variables
             if (Button.Shape === "Rectangle") {
@@ -91,7 +95,9 @@ class ControlObject extends InteractiveObject {
                 this.objectSet.push(temp);
             }
         }
+        // Separate area from other shapes to enable dots to be made with line (where height is technically 0
         if (this.onDrawingArea && Button.Shape === "Line") {
+            // sets the size of the line according to selection
             if (Size_button.Size === "S") {
                 let line_s = new Line(this.xMouseStart, this.yMouseStart, this.w, this.h, fillColour, 4);
                 this.objectSet.push(line_s);
@@ -109,18 +115,21 @@ class ControlObject extends InteractiveObject {
     }
 
     update() {
+        // Updates all objects and pushes into program
         ctx.save();
         this.filledRect(this.x, this.y, this.draw_w, this.draw_h, colArray[1][2]);
         ctx.clip();
+        // sets the width and height dependent on distance moved by mouse
         this.w = this.xMouse - this.xMouseStart;
         this.h = this.yMouse - this.yMouseStart;
+        // Every object added to the object set list
         for (let i = 0; i < this.objectSet.length; i++) {
             this.objectSet[i].update();
         }
         if (this.onDrawingArea) {
             this.draw();
         }
-
+        // if the object is within bounds
         this.inBounds = this.inBoundsCheck(this.xMouse, this.yMouse, this.xMouseStart, this.yMouseStart, this.draw_w, this.draw_h);
         for (let i = 0; i < this.objectSet.length; i++ && this.inBounds) {
             this.objectSet[i].update();
@@ -133,9 +142,11 @@ class ControlObject extends InteractiveObject {
 
     draw() {
         let fillColour;
+        // brings selected swatch in for shape colour
         if (Swatch.selected) {
             fillColour = Swatch.selected.fill;
         }
+        // declaring variables
         let x = this.xMouseStart;
         let y = this.yMouseStart;
         let w = this.w;

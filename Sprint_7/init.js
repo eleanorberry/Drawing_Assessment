@@ -440,13 +440,12 @@ class Heart {
         this.fillcolour = fillcolour;
         // Calculates the size of the heart
         this.d = Math.min(w, h);
-        // Holds the position of the heart
-        //this.p = 0;
     }
     update() {
         this.draw();
     }
     draw() {
+        // Holds the position of the heart
         let p = 0;
         let d = this.d;
         ctx.save();

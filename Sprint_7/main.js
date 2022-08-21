@@ -44,7 +44,7 @@ w = 33;
 h = 33;
 
 // List of colours for palette using swatch class
-// Made each location specific initially to cater for original design plan but changed mind
+// Made each location specific to cater for design plan
 let c1 = "rgb(0,0,0)";
 let black_1 = new Swatch(x, y, w, h, c1, colArray[0][0], colArray[0][0]);
 let black_2 = new Swatch(x, y + 1.3 * w, w, h, c1, colArray[0][1], colArray[0][1]);
